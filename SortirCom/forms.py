@@ -1,6 +1,7 @@
 from django import forms
 from django.core.validators import RegexValidator
 from SortirCom.models import Site, Lieu, Ville
+import datetime
 
 
 class ParticipantForm(forms.Form):
@@ -15,6 +16,12 @@ class ParticipantForm(forms.Form):
     administrateur = forms.BooleanField(required=False, label='Est administrateur :')
     actif = forms.BooleanField(required=False, label='Est actif :')
 
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        conf_password = self.cleaned_data.get('confirmPassword')
+        if password != conf_password:
+            raise forms.ValidationError("Attention : Mot de passe et confirmation différents")
+
 
 class SortieForm(forms.Form):
     nom = forms.CharField(min_length=2, max_length=50, required=True, label='Nom Sortie :')
@@ -25,6 +32,28 @@ class SortieForm(forms.Form):
     infosSortie = forms.CharField(widget=forms.Textarea, required=True, label='infos :')
     lieu = forms.ModelChoiceField(queryset=Lieu.objects.all(), empty_label=None, required=True, label='Lieu :')
 
+    def clean_dateLimiteInscription(self):
+        datelimite = self.cleaned_data.get('dateLimiteInscription')
+        datejour = datetime.datetime.now()
+        if datelimite <= datejour:
+            raise forms.ValidationError("Attention : La date limite doit etre postérieur à aujourd'hui")
+
+    def clean_dateHeureDebut(self):
+        datedebut = self.cleaned_data.get('dateHeureDebut')
+        datelimite = self.cleaned_data.get('dateLimiteInscription')
+        datejour = datetime.datetime.now()
+        if datedebut < datelimite.hour + 1:
+            raise forms.ValidationError("Attention : La date de début "
+                                        "doit etre postérieur à la date de fin d'inscription")
+        if datedebut < datejour:
+            raise forms.ValidationError("Attention : La date de début doit etre postérieur à aujourd'hui")
+
+    def clean_dateHeureFin(self):
+        datedebut = self.cleaned_data.get('dateHeureDebut')
+        datefin = self.cleaned_data.get('dateHeureFin')
+        if datefin <= datedebut:
+            raise forms.ValidationError("Attention : la date et l'heure de fin "
+                                        "doivent être postérieur à la date de début")
 
 class SiteForm(forms.Form):
     nom = forms.CharField(min_length=2, max_length=50, required=True, label=None)

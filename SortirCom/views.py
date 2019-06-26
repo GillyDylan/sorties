@@ -5,5 +5,5 @@ from . import forms
 
 
 def workspace(request):
-    participantForm = forms.ParticipantForm().__str__()
-    return HttpResponse(participantForm)
+    participantForm = forms.ParticipantForm()
+    return HttpResponse("")
