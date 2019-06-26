@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ title }}</h1>
-        <p>Feed page, go to auth page <router-link to="/auth">here</router-link> </p>
+        <p>Feed page, go to authe page <router-link to="/auth">here</router-link> </p>
     </div>
 </template>
 

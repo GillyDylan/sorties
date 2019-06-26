@@ -1,4 +1,4 @@
-const mix = require('laravel-mix')
+const mix = require('laravel-mix');
 
 /** 
  * Let's use laravel-mix to minify all the 
@@ -6,4 +6,4 @@ const mix = require('laravel-mix')
 */
 
 mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.sass', 'public/css')
+    .sass('resources/sass/app.sass', 'public/css');
