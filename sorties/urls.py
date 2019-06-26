@@ -22,7 +22,8 @@ from sorties.settings import MEDIA_ROOT, MEDIA_URL, DEBUG
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('sorties.core.urls'))
+    path('', include('sorties.core.urls')),
+    path('workspace/', include('SortirCom.urls')),
 ]
 
 
